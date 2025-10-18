@@ -22,6 +22,9 @@ interface ChatWindowProps {
   scenario?: string;
   onPlayAudio?: (messageId: number) => void;
   onPlayResource?: (messageId: number) => void;
+  // Controlled playback state (managed by parent)
+  playingAudioId?: number | null;
+  playingResourceId?: number | null;
 }
 
 const ChatWindow: React.FC<ChatWindowProps> = ({
@@ -70,7 +73,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
                 audioSrc={message.audioSrc}
                 duration={message.duration}
                 isPlaying={playingAudioId === message.id}
-                onPlayPause={() => handlePlayPause(message.id)}
+                onPlayPause={() => onPlayAudio?.(message.id)}
               />
 
               {message.resource && message.sender === "ai" && (
@@ -79,7 +82,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
                     title={message.resource.title}
                     img={message.resource.img}
                     audioSrc={message.resource.audioSrc}
-                    onPlay={() => handlePlayResource(message.id)}
+                    onPlay={() => onPlayResource?.(message.id)}
                   />
                 </div>
               )}
