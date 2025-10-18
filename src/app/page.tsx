@@ -25,6 +25,7 @@ interface Message {
     title: string;
     img: string;
     audioSrc: string;
+    description: string; 
   };
 }
 
@@ -63,7 +64,7 @@ export default function Home() {
           duration
         };
 
-        setMessages(prev => [...prev, newUserMessage]);
+        setMessages((prev: Message[]) => [...prev, newUserMessage]);
 
         // Simulate AI response after 2 seconds (can be replaced by real API)
         setTimeout(() => {
@@ -75,10 +76,11 @@ export default function Home() {
             resource: Math.random() > 0.5 ? {
               title: '🎓 Learning Resources',
               img: '/img/resource-new.jpg',
-              audioSrc: '/audio/resource-new.mp3'
+              audioSrc: '/audio/resource-new.mp3',
+              description: 'Learn more about this topic',
             } : undefined
           };
-          setMessages(prev => [...prev, newAIMessage]);
+          setMessages((prev: Message[]) => [...prev, newAIMessage]);
         }, 2000);
       };
 

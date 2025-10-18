@@ -12,8 +12,16 @@ interface Message {
     audioSrc: string;
     description: string;
   }
-  
-  interface ScenarioData {
+}
+
+interface Resource {
+  id: number;
+  title: string;
+  img: string;
+  audioSrc: string;
+  description: string;
+}
+interface ScenarioData {
     id: string;
     title: string;
     description: string;
