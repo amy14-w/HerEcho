@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import AudioBubble from './AudioBubble';
-import ResourceCard from './ResourceCard';
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import AudioBubble from "./AudioBubble";
+import ResourceCard from "./ResourceCard";
 
 interface Message {
   id: number;
-  sender: 'user' | 'ai';
+  sender: "user" | "ai";
   audioSrc: string;
   duration: string;
   resource?: {
@@ -24,9 +24,16 @@ interface ChatWindowProps {
   onPlayResource?: (messageId: number) => void;
 }
 
-const ChatWindow: React.FC<ChatWindowProps> = ({ messages, scenario, onPlayAudio, onPlayResource }) => {
+const ChatWindow: React.FC<ChatWindowProps> = ({
+  messages,
+  scenario,
+  onPlayAudio,
+  onPlayResource,
+}) => {
   const [playingAudioId, setPlayingAudioId] = useState<number | null>(null);
-  const [playingResourceId, setPlayingResourceId] = useState<number | null>(null);
+  const [playingResourceId, setPlayingResourceId] = useState<number | null>(
+    null
+  );
 
   const handlePlayPause = (messageId: number) => {
     if (playingAudioId === messageId) {
@@ -59,14 +66,14 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ messages, scenario, onPlayAudio
               transition={{ duration: 0.3 }}
             >
               <AudioBubble
-                isUser={message.sender === 'user'}
+                isUser={message.sender === "user"}
                 audioSrc={message.audioSrc}
                 duration={message.duration}
                 isPlaying={playingAudioId === message.id}
                 onPlayPause={() => handlePlayPause(message.id)}
               />
-              
-              {message.resource && message.sender === 'ai' && (
+
+              {message.resource && message.sender === "ai" && (
                 <div className="flex justify-start">
                   <ResourceCard
                     title={message.resource.title}
