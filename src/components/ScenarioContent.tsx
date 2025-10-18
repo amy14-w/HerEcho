@@ -1,5 +1,5 @@
-// src/components/ScenarioContent.tsx
 'use client';
+// src/components/ScenarioContent.tsx
 interface Message {
     id: number;
     sender: 'user' | 'ai';
@@ -38,7 +38,39 @@ interface Message {
       resources: [], // Finance resources
       colorTheme: 'green'
     },
-    // ... other scenarios
+    health: {
+        id: 'health',
+        title: 'Health & Wellness',
+        description: 'Learn about health, nutrition, and wellness',
+        messages: [],
+        resources: [],
+        colorTheme: 'red'
+      },
+      career: {
+        id: 'career',
+        title: 'Career Development',
+        description: 'Learn about job skills and career growth',
+        messages: [],
+        resources: [],
+        colorTheme: 'blue'
+      },
+      safety: {
+        id: 'safety',
+        title: 'Safety & Security',
+        description: 'Learn about personal safety and security',
+        messages: [],
+        resources: [],
+        colorTheme: 'purple'
+      },
+      success: {
+        id: 'success',
+        title: 'Success Stories',
+        description: 'Learn from inspiring success stories',
+        messages: [],
+        resources: [],
+        colorTheme: 'yellow'
+      }
   };
+  
   
   export default scenarioData;

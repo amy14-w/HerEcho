@@ -41,6 +41,7 @@ export default function Home() {
 
   const handleStartRecording = async () => {
     try {
+      console.log('Browser:', navigator.userAgent); // Add this line
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const mediaRecorder = new MediaRecorder(stream);
       recordedChunksRef.current = [];
@@ -151,6 +152,11 @@ export default function Home() {
     // In a real app, this would play resource audio
   };
 
+  const handleScenarioChange = (scenarioId: string) => {
+    setActiveScenario(scenarioId);
+    setMessages(scenarioData[scenarioId].messages);
+  };
+
   return (
     <div className="max-w-md mx-auto h-screen flex flex-col bg-gradient-to-b from-slate-50 to-slate-200">
       <HeaderBar />
@@ -159,7 +165,7 @@ export default function Home() {
         <ScenarioTabs 
           scenarios={scenarios}
           activeScenario={activeScenario}
-          onScenarioChange={setActiveScenario}
+          onScenarioChange={handleScenarioChange}
         />
         
         <div className="flex-1 ml-20">
