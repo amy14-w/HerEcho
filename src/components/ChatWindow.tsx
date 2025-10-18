@@ -55,11 +55,6 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
     }
     onPlayResource?.(messageId);
   };
-  const handleResendToContacts = (messageId: number) => {
-    console.log('Resending message to contacts:', messageId);
-    // Here you would implement the actual resend logic
-    // Maybe show a contact picker or send to all contacts
-  };
 
   return (
     <div className="h-full overflow-y-auto px-4 py-2 bg-gradient-to-b from-slate-50 to-slate-200">
@@ -78,8 +73,10 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
                 audioSrc={message.audioSrc}
                 duration={message.duration}
                 isPlaying={playingAudioId === message.id}
-                onPlayPause={() => handlePlayPause(message.id)}
-                onResendToContacts={() => handleResendToContacts(message.id)}
+                onPlayPause={() => onPlayAudio?.(message.id)}
+                onResendToContacts={() =>
+                  console.log(`Resending message ${message.id} to contacts`)
+                }
               />
 
               {message.resource && message.sender === "ai" && (
