@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# HerEcho - Voice-Only Chat Interface
+
+A Next.js + Tailwind CSS application that simulates a WhatsApp-style voice chat interface for women in low-literacy communities. All communication is via audio — no text messages.
+
+## Features
+
+- 🎤 **Voice-Only Interface**: No text input, only audio communication
+- 🎨 **Beautiful Design**: Clean, warm, WhatsApp-inspired interface with soft purples and teals
+- 🔊 **Audio Bubbles**: Play/pause controls with animated waveforms
+- 📚 **Resource Cards**: AI can share learning resources with audio content
+- 🎯 **Accessibility**: Large microphone button and intuitive design
+- ✨ **Animations**: Smooth transitions and visual feedback using Framer Motion
+- 🚀 **Next.js Ready**: Built with Next.js for future API integration
 
 ## Getting Started
 
-First, run the development server:
-
+1. Install dependencies:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Start the development server:
+```bash
+npm run dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project Structure
 
-## Learn More
+```
+/her-echo-frontend
+ ├── /src
+ │    ├── /app
+ │    │     ├── globals.css        # Global styles
+ │    │     ├── layout.tsx         # Root layout
+ │    │     └── page.tsx            # Main page component
+ │    ├── /components
+ │    │     ├── HeaderBar.tsx      # Top navigation with title and status
+ │    │     ├── ChatWindow.tsx     # Main chat container
+ │    │     ├── AudioBubble.tsx    # Voice message bubbles
+ │    │     ├── MicButton.tsx      # Recording button
+ │    │     ├── ResourceCard.tsx   # Learning resource cards
+ │    │     └── Waveform.tsx       # Animated audio visualization
+ │    └── /data
+ │         └── sampleMessages.ts   # Mock conversation data
+ ├── next.config.js                # Next.js configuration
+ ├── tailwind.config.js            # Tailwind CSS configuration
+ └── package.json                  # Dependencies
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Design Philosophy
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Audio-First**: Every interaction is designed around voice communication
+- **Empowering**: Warm colors and friendly interface to build confidence
+- **Accessible**: Large touch targets and clear visual feedback
+- **Intuitive**: Familiar WhatsApp-style layout adapted for voice
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Technology Stack
 
-## Deploy on Vercel
+- Next.js 15
+- React 18
+- TypeScript
+- Tailwind CSS
+- Framer Motion
+- Lucide React (icons)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Future API Integration
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This Next.js setup is ready for:
+- Audio file uploads (`/api/upload`)
+- AI response generation (`/api/chat`)
+- User authentication (`/api/auth`)
+- Resource management (`/api/resources`)
+
+## Mock Features
+
+This is a frontend demo with placeholder functionality:
+- Audio playback simulation
+- Mock recording states
+- Sample conversation data
+- Simulated AI responses with resources
+
+## Contributing
+
+This project is designed to empower women in low-literacy communities through accessible voice-based learning. Contributions that improve accessibility, usability, or educational value are especially welcome.
