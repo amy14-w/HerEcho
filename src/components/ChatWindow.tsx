@@ -62,8 +62,8 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
   };
 
   return (
-    <div className="flex-1 overflow-y-auto px-4 py-4 bg-gradient-to-b from-slate-50 to-slate-200">
-      <div className="space-y-4">
+    <div className="h-full overflow-y-auto px-4 py-2 bg-gradient-to-b from-slate-50 to-slate-200">
+      <div className="space-y-3">
         <AnimatePresence>
           {messages.map((message) => (
             <motion.div

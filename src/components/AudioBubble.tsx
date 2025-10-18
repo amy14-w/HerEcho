@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { Play, Pause, Users, X, Check, Share2} from 'lucide-react';
-import Waveform from './Waveform';
+import React, { useState } from "react";
+import { Play, Pause, Users, X, Check, Share2 } from "lucide-react";
+import Waveform from "./Waveform";
 
 interface AudioBubbleProps {
   isUser: boolean;
@@ -13,22 +13,24 @@ interface AudioBubbleProps {
   onResendToContacts?: () => void;
 }
 
-const AudioBubble: React.FC<AudioBubbleProps> = ({ 
-  isUser, 
-  audioSrc, 
-  duration, 
-  isPlaying = false, 
+const AudioBubble: React.FC<AudioBubbleProps> = ({
+  isUser,
+  audioSrc,
+  duration,
+  isPlaying = false,
   onPlayPause,
-  onResendToContacts 
+  onResendToContacts,
 }) => {
   const [showResendMenu, setShowResendMenu] = useState(false);
   const [showContactPicker, setShowContactPicker] = useState(false);
   const [showSentAnimation, setShowSentAnimation] = useState(false);
-  const gradientClass = isUser 
-    ? 'bg-gradient-to-r from-her-purple-500 to-her-pink-500' 
-    : 'bg-gradient-to-r from-her-teal-400 to-her-emerald-500';
-  
-  const glowClass = !isUser && isPlaying ? 'animate-glow' : '';
+
+  const gradientStyle = isUser
+    ? { background: "linear-gradient(135deg, #D13955 0%, #FCA6AF 100%)" }
+    : { background: "linear-gradient(135deg, #C44C18 0%, #EE6F34 100%)" };
+
+  const glowClass = !isUser && isPlaying ? "animate-glow" : "";
+
   const handleDoubleClick = () => {
     if (onResendToContacts) {
       setShowResendMenu(true);
@@ -52,18 +54,22 @@ const AudioBubble: React.FC<AudioBubbleProps> = ({
   };
 
   const contacts = [
-    { name: 'Mom', color: 'bg-pink-100 text-pink-700' },
-    { name: 'Sister', color: 'bg-purple-100 text-purple-700' },
-    { name: 'Brother', color: 'bg-blue-100 text-blue-700' },
-    { name: 'Situationship', color: 'bg-red-100 text-red-700' },
-    { name: 'Best Friend', color: 'bg-green-100 text-green-700' },
-    { name: 'Mentor', color: 'bg-yellow-100 text-yellow-700' }
+    { name: "Mom", color: "bg-pink-100 text-pink-700" },
+    { name: "Sister", color: "bg-purple-100 text-purple-700" },
+    { name: "Brother", color: "bg-blue-100 text-blue-700" },
+    { name: "Situationship", color: "bg-red-100 text-red-700" },
+    { name: "Best Friend", color: "bg-green-100 text-green-700" },
+    { name: "Mentor", color: "bg-yellow-100 text-yellow-700" },
   ];
-  
+
   return (
-    <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-4 relative`}>
-      <div 
-        className={`${gradientClass} ${glowClass} rounded-2xl p-3 shadow-md text-white flex items-center gap-3 max-w-xs cursor-pointer`}
+    <div className={`flex ${isUser ? "justify-end" : "justify-start"} mb-4 relative`}>
+      <div
+        className={`${glowClass} rounded-2xl p-3 shadow-md text-white flex items-center gap-3 cursor-pointer`}
+        style={{
+          maxWidth: "320px",
+          ...gradientStyle,
+        }}
         onDoubleClick={handleDoubleClick}
       >
         <button
@@ -76,12 +82,10 @@ const AudioBubble: React.FC<AudioBubbleProps> = ({
             <Play size={16} className="text-white ml-0.5" />
           )}
         </button>
-        
+
         <Waveform isPlaying={isPlaying} />
-        
-        <span className="text-xs opacity-80 font-medium">
-          {duration}
-        </span>
+
+        <span className="text-xs opacity-80 font-medium">{duration}</span>
       </div>
       {/* Resend Menu Popup */}
       {showResendMenu && (
