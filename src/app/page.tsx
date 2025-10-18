@@ -1,24 +1,25 @@
-'use client';
+"use client";
 
-import React, { useState, useRef } from 'react';
-import HeaderBar from '../components/HeaderBar';
-import ChatWindow from '../components/ChatWindow';
-import ScenarioTabs from '../components/ScenarioTabs';
-import scenarioData from '../components/ScenarioContent';
-import MicButton from '../components/MicButton';
+import React, { useState, useRef } from "react";
+import CombinedHeader from "../components/CombinedHeader";
+import ChatWindow from "../components/ChatWindow";
+import ScenarioTabs from "../components/ScenarioTabs";
+import scenarioData from "../components/ScenarioContent";
+import MicButton from "../components/MicButton";
+import IPhoneFrame from "../components/IPhoneFrame";
 
 // Add scenarios data
 const scenarios = [
-  { id: 'finance', title: '💰 Finance', icon: '💳', color: 'green' },
-  { id: 'health', title: '🏥 Health', icon: '❤️', color: 'red' },
-  { id: 'career', title: '💼 Career', icon: '📈', color: 'blue' },
-  { id: 'safety', title: '🛡️ Safety', icon: '🔒', color: 'purple' },
-  { id: 'success', title: '🌟 Success Stories', icon: '✨', color: 'yellow' }
+  { id: "finance", title: "💰 Finance", icon: "💳", color: "green" },
+  { id: "health", title: "🏥 Health", icon: "❤️", color: "red" },
+  { id: "career", title: "💼 Career", icon: "📈", color: "blue" },
+  { id: "safety", title: "🛡️ Safety", icon: "🔒", color: "purple" },
+  { id: "success", title: "🌟 Success Stories", icon: "✨", color: "yellow" },
 ];
 
 interface Message {
   id: number;
-  sender: 'user' | 'ai';
+  sender: "user" | "ai";
   audioSrc: string;
   duration: string;
   resource?: {
@@ -30,8 +31,10 @@ interface Message {
 
 export default function Home() {
   const [isRecording, setIsRecording] = useState(false);
-  const [activeScenario, setActiveScenario] = useState('finance');
-  const [messages, setMessages] = useState(scenarioData[activeScenario].messages);
+  const [activeScenario, setActiveScenario] = useState("finance");
+  const [messages, setMessages] = useState(
+    scenarioData[activeScenario].messages
+  );
   const [playingAudioId, setPlayingAudioId] = useState<number | null>(null);
 
   // Refs for recording
@@ -50,34 +53,39 @@ export default function Home() {
       };
 
       mediaRecorder.onstop = async () => {
-        const blob = new Blob(recordedChunksRef.current, { type: 'audio/webm' });
+        const blob = new Blob(recordedChunksRef.current, {
+          type: "audio/webm",
+        });
         const url = URL.createObjectURL(blob);
 
         const duration = await estimateBlobDuration(blob);
 
         const newUserMessage: Message = {
           id: Date.now(),
-          sender: 'user',
+          sender: "user",
           audioSrc: url,
-          duration
+          duration,
         };
 
-        setMessages(prev => [...prev, newUserMessage]);
+        setMessages((prev) => [...prev, newUserMessage]);
 
         // Simulate AI response after 2 seconds (can be replaced by real API)
         setTimeout(() => {
           const newAIMessage: Message = {
             id: Date.now() + 1,
-            sender: 'ai',
-            audioSrc: '/audio/ai-response.mp3',
-            duration: '0:24',
-            resource: Math.random() > 0.5 ? {
-              title: '🎓 Learning Resources',
-              img: '/img/resource-new.jpg',
-              audioSrc: '/audio/resource-new.mp3'
-            } : undefined
+            sender: "ai",
+            audioSrc: "/audio/ai-response.mp3",
+            duration: "0:24",
+            resource:
+              Math.random() > 0.5
+                ? {
+                    title: "🎓 Learning Resources",
+                    img: "/img/resource-new.jpg",
+                    audioSrc: "/audio/resource-new.mp3",
+                  }
+                : undefined,
           };
-          setMessages(prev => [...prev, newAIMessage]);
+          setMessages((prev) => [...prev, newAIMessage]);
         }, 2000);
       };
 
@@ -85,16 +93,19 @@ export default function Home() {
       mediaRecorderRef.current = mediaRecorder;
       setIsRecording(true);
     } catch (err) {
-      console.error('Could not start recording', err);
+      console.error("Could not start recording", err);
     }
   };
 
   const handleStopRecording = () => {
     setIsRecording(false);
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+    if (
+      mediaRecorderRef.current &&
+      mediaRecorderRef.current.state !== "inactive"
+    ) {
       mediaRecorderRef.current.stop();
       // Stop all tracks to release mic
-      mediaRecorderRef.current.stream.getTracks().forEach(t => t.stop());
+      mediaRecorderRef.current.stream.getTracks().forEach((t) => t.stop());
       mediaRecorderRef.current = null;
     }
   };
@@ -107,22 +118,22 @@ export default function Home() {
       const cleanup = () => {
         URL.revokeObjectURL(tempUrl);
       };
-      audio.addEventListener('loadedmetadata', () => {
+      audio.addEventListener("loadedmetadata", () => {
         const seconds = Math.round(audio.duration || 0);
         const mm = Math.floor(seconds / 60);
         const ss = seconds % 60;
         cleanup();
-        resolve(`${mm}:${ss.toString().padStart(2, '0')}`);
+        resolve(`${mm}:${ss.toString().padStart(2, "0")}`);
       });
-      audio.addEventListener('error', () => {
+      audio.addEventListener("error", () => {
         cleanup();
-        resolve('0:00');
+        resolve("0:00");
       });
     });
   };
 
   const handlePlayAudio = (messageId: number) => {
-    const message = messages.find(m => m.id === messageId);
+    const message = messages.find((m) => m.id === messageId);
     if (!message) return;
 
     if (playingAudioId === messageId) {
@@ -142,42 +153,53 @@ export default function Home() {
     }
 
     audioElRef.current.src = message.audioSrc;
-    audioElRef.current.play().catch(err => console.error('Play failed', err));
+    audioElRef.current.play().catch((err) => console.error("Play failed", err));
     setPlayingAudioId(messageId);
   };
 
   const handlePlayResource = (messageId: number) => {
-    console.log('Playing resource for message:', messageId);
+    console.log("Playing resource for message:", messageId);
     // In a real app, this would play resource audio
   };
 
   return (
-    <div className="max-w-md mx-auto h-screen flex flex-col bg-gradient-to-b from-slate-50 to-slate-200">
-      <HeaderBar />
-      
-      <div className="flex flex-1">
-        <ScenarioTabs 
-          scenarios={scenarios}
-          activeScenario={activeScenario}
-          onScenarioChange={setActiveScenario}
-        />
-        
-        <div className="flex-1 ml-20">
-          <ChatWindow 
-            messages={messages}
-            scenario={activeScenario}
-            onPlayAudio={handlePlayAudio}
-            onPlayResource={handlePlayResource}
-            playingAudioId={playingAudioId}
+    <IPhoneFrame>
+      <div 
+        className="flex flex-col bg-gradient-to-b from-slate-50 to-slate-200"
+        style={{ 
+          width: '374px', 
+          height: 'calc(812px - 40px)',
+          overflow: 'hidden'
+        }}
+      >
+        <CombinedHeader />
+
+        <div className="flex flex-1 min-h-0 relative">
+          {/* Scenario tabs overlay - doesn't take up layout space */}
+          <ScenarioTabs
+            scenarios={scenarios}
+            activeScenario={activeScenario}
+            onScenarioChange={setActiveScenario}
           />
+
+          {/* Chat window uses full width */}
+          <div className="flex-1 w-full">
+            <ChatWindow
+              messages={messages}
+              scenario={activeScenario}
+              onPlayAudio={handlePlayAudio}
+              onPlayResource={handlePlayResource}
+              playingAudioId={playingAudioId}
+            />
+          </div>
         </div>
+
+        <MicButton
+          isRecording={isRecording}
+          onStartRecording={handleStartRecording}
+          onStopRecording={handleStopRecording}
+        />
       </div>
-      
-      <MicButton
-        isRecording={isRecording}
-        onStartRecording={handleStartRecording}
-        onStopRecording={handleStopRecording}
-      />
-    </div>
+    </IPhoneFrame>
   );
 }

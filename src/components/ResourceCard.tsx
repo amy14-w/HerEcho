@@ -12,7 +12,7 @@ interface ResourceCardProps {
 
 const ResourceCard: React.FC<ResourceCardProps> = ({ title, img, audioSrc, onPlay }) => {
   return (
-    <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-sm border border-white/20 mb-4 max-w-xs">
+    <div className="bg-white/90 backdrop-blur-sm rounded-xl p-3 shadow-sm border border-white/20 mb-4" style={{ maxWidth: '320px' }}>
       <div className="flex items-center gap-3">
         <div className="w-12 h-12 bg-gradient-to-br from-her-teal-400 to-her-emerald-500 rounded-lg flex items-center justify-center">
           <span className="text-white text-lg">📚</span>
