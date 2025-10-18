@@ -1,8 +1,16 @@
 "use client";
 
 import React, { useState } from "react";
-import { Play, Pause, Users, X, Check, Share2 } from "lucide-react";
+import { Play, Pause, Users, X, Check, Share2, Mic } from "lucide-react";
 import Waveform from "./Waveform";
+
+// TypeScript declarations for Speech Recognition
+declare global {
+  interface Window {
+    SpeechRecognition: any;
+    webkitSpeechRecognition: any;
+  }
+}
 
 interface AudioBubbleProps {
   isUser: boolean;
@@ -24,6 +32,8 @@ const AudioBubble: React.FC<AudioBubbleProps> = ({
   const [showResendMenu, setShowResendMenu] = useState(false);
   const [showContactPicker, setShowContactPicker] = useState(false);
   const [showSentAnimation, setShowSentAnimation] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [recognizedText, setRecognizedText] = useState('');
 
   const gradientStyle = isUser
     ? { background: "linear-gradient(135deg, #D13955 0%, #FCA6AF 100%)" }
@@ -51,6 +61,63 @@ const AudioBubble: React.FC<AudioBubbleProps> = ({
     setTimeout(() => {
       setShowSentAnimation(false);
     }, 2000);
+  };
+
+  const handleVoiceRecognition = () => {
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
+      
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = 'en-US';
+      
+      recognition.onstart = () => {
+        setIsListening(true);
+        setRecognizedText('');
+      };
+      
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript.toLowerCase();
+        setRecognizedText(transcript);
+        
+        // Find matching contact
+        const contactMap = {
+          'mom': 'Mom',
+          'mother': 'Mom',
+          'sister': 'Sister',
+          'brother': 'Brother',
+          'situationship': 'Situationship',
+          'best friend': 'Best Friend',
+          'friend': 'Best Friend',
+          'mentor': 'Mentor'
+        };
+        
+        const matchedContact = Object.keys(contactMap).find(key => 
+          transcript.includes(key)
+        );
+        
+        if (matchedContact) {
+          const contactName = contactMap[matchedContact];
+          handleSendToContact(contactName);
+        } else {
+          alert('Contact not recognized. Please say: Mom, Sister, Brother, Situationship, Best Friend, or Mentor');
+        }
+      };
+      
+      recognition.onerror = () => {
+        setIsListening(false);
+        alert('Speech recognition failed. Please try again.');
+      };
+      
+      recognition.onend = () => {
+        setIsListening(false);
+      };
+      
+      recognition.start();
+    } else {
+      alert('Speech recognition not supported in this browser');
+    }
   };
 
   const contacts = [
@@ -97,7 +164,7 @@ const AudioBubble: React.FC<AudioBubbleProps> = ({
           <div className="flex gap-2">
             <button
               onClick={handleResend}
-              className="flex-1 bg-her-purple-500 text-white px-3 py-2 rounded-lg text-sm hover:bg-her-purple-600 transition-colors flex items-center justify-center gap-1"
+              className="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-2 rounded-lg text-sm hover:from-purple-600 hover:to-pink-600 transition-colors flex items-center justify-center gap-1"
             >
               <Users size={14} />
               Choose Contact
@@ -137,23 +204,42 @@ const AudioBubble: React.FC<AudioBubbleProps> = ({
                 </button>
               ))}
             </div>
+            
             <div className="mt-4 pt-4 border-t border-gray-200">
-              <button
-                onClick={() => setShowContactPicker(false)}
-                className="w-full bg-gray-200 text-gray-700 py-2 rounded-lg hover:bg-gray-300 transition-colors"
-              >
-                Cancel
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setShowContactPicker(false)}
+                  className="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg hover:bg-gray-300 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleVoiceRecognition}
+                  className={`flex-1 py-2 rounded-lg transition-colors flex items-center justify-center gap-1 ${
+                    isListening 
+                      ? 'bg-gradient-to-r from-red-500 to-pink-500 text-white hover:from-red-600 hover:to-pink-600' 
+                      : 'bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600'
+                  }`}
+                >
+                  <Mic size={14} />
+                  {isListening ? 'Listening...' : 'Say Contact'}
+                </button>
+              </div>
+              {recognizedText && (
+                <div className="mt-2 text-center text-sm text-gray-600">
+                  Heard: "{recognizedText}"
+                </div>
+              )}
             </div>
           </div>
         </div>
       )}
-            {/* Sent Animation */}
+      {/* Sent Animation */}
       {showSentAnimation && (
         <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
           <div className="bg-green-500 text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-2 animate-bounce">
             <Check size={20} />
-            <span className="font-semibold">Sent!</span>
+            <span className="font-semibold">Sent to {recognizedText || 'Contact'}!</span>
           </div>
           
           {/* Explosion particles */}
