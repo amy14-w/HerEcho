@@ -19,11 +19,12 @@ interface Message {
 
 interface ChatWindowProps {
   messages: Message[];
+  scenario?: string;
   onPlayAudio?: (messageId: number) => void;
   onPlayResource?: (messageId: number) => void;
 }
 
-const ChatWindow: React.FC<ChatWindowProps> = ({ messages, onPlayAudio, onPlayResource }) => {
+const ChatWindow: React.FC<ChatWindowProps> = ({ messages, scenario, onPlayAudio, onPlayResource }) => {
   const [playingAudioId, setPlayingAudioId] = useState<number | null>(null);
   const [playingResourceId, setPlayingResourceId] = useState<number | null>(null);
 

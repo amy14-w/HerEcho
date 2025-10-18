@@ -3,8 +3,18 @@
 import React, { useState } from 'react';
 import HeaderBar from '../components/HeaderBar';
 import ChatWindow from '../components/ChatWindow';
+import ScenarioTabs from '../components/ScenarioTabs';
+import scenarioData from '../components/ScenarioContent';
 import MicButton from '../components/MicButton';
-import { sampleMessages } from '../data/sampleMessages';
+
+// Add scenarios data
+const scenarios = [
+  { id: 'finance', title: '💰 Finance', icon: '💳', color: 'green' },
+  { id: 'health', title: '🏥 Health', icon: '❤️', color: 'red' },
+  { id: 'career', title: '💼 Career', icon: '📈', color: 'blue' },
+  { id: 'safety', title: '🛡️ Safety', icon: '🔒', color: 'purple' },
+  { id: 'success', title: '🌟 Success Stories', icon: '✨', color: 'yellow' }
+];
 
 interface Message {
   id: number;
@@ -19,8 +29,9 @@ interface Message {
 }
 
 export default function Home() {
-  const [messages, setMessages] = useState<Message[]>(sampleMessages);
   const [isRecording, setIsRecording] = useState(false);
+  const [activeScenario, setActiveScenario] = useState('finance');
+  const [messages, setMessages] = useState(scenarioData[activeScenario].messages);
 
   const handleStartRecording = () => {
     setIsRecording(true);
@@ -75,11 +86,22 @@ export default function Home() {
     <div className="max-w-md mx-auto h-screen flex flex-col bg-gradient-to-b from-slate-50 to-slate-200">
       <HeaderBar />
       
-      <ChatWindow 
-        messages={messages}
-        onPlayAudio={handlePlayAudio}
-        onPlayResource={handlePlayResource}
-      />
+      <div className="flex flex-1">
+        <ScenarioTabs 
+          scenarios={scenarios}
+          activeScenario={activeScenario}
+          onScenarioChange={setActiveScenario}
+        />
+        
+        <div className="flex-1 ml-20">
+          <ChatWindow 
+            messages={messages}
+            scenario={activeScenario}
+            onPlayAudio={handlePlayAudio}
+            onPlayResource={handlePlayResource}
+          />
+        </div>
+      </div>
       
       <MicButton
         isRecording={isRecording}
