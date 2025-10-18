@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import HeaderBar from '../components/HeaderBar';
 import ChatWindow from '../components/ChatWindow';
 import ScenarioTabs from '../components/ScenarioTabs';
@@ -32,49 +32,118 @@ export default function Home() {
   const [isRecording, setIsRecording] = useState(false);
   const [activeScenario, setActiveScenario] = useState('finance');
   const [messages, setMessages] = useState(scenarioData[activeScenario].messages);
+  const [playingAudioId, setPlayingAudioId] = useState<number | null>(null);
 
-  const handleStartRecording = () => {
-    setIsRecording(true);
-    // Simulate recording for demo
-    setTimeout(() => {
-      handleStopRecording();
-    }, 3000);
+  // Refs for recording
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const recordedChunksRef = useRef<BlobPart[]>([]);
+  const audioElRef = useRef<HTMLAudioElement | null>(null);
+
+  const handleStartRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      recordedChunksRef.current = [];
+
+      mediaRecorder.ondataavailable = (e) => {
+        if (e.data && e.data.size > 0) recordedChunksRef.current.push(e.data);
+      };
+
+      mediaRecorder.onstop = async () => {
+        const blob = new Blob(recordedChunksRef.current, { type: 'audio/webm' });
+        const url = URL.createObjectURL(blob);
+
+        const duration = await estimateBlobDuration(blob);
+
+        const newUserMessage: Message = {
+          id: Date.now(),
+          sender: 'user',
+          audioSrc: url,
+          duration
+        };
+
+        setMessages(prev => [...prev, newUserMessage]);
+
+        // Simulate AI response after 2 seconds (can be replaced by real API)
+        setTimeout(() => {
+          const newAIMessage: Message = {
+            id: Date.now() + 1,
+            sender: 'ai',
+            audioSrc: '/audio/ai-response.mp3',
+            duration: '0:24',
+            resource: Math.random() > 0.5 ? {
+              title: '🎓 Learning Resources',
+              img: '/img/resource-new.jpg',
+              audioSrc: '/audio/resource-new.mp3'
+            } : undefined
+          };
+          setMessages(prev => [...prev, newAIMessage]);
+        }, 2000);
+      };
+
+      mediaRecorder.start();
+      mediaRecorderRef.current = mediaRecorder;
+      setIsRecording(true);
+    } catch (err) {
+      console.error('Could not start recording', err);
+    }
   };
 
   const handleStopRecording = () => {
     setIsRecording(false);
-    
-    // Add new user message with proper ID
-    const newUserMessage: Message = {
-      id: Date.now(), // Use timestamp for unique ID
-      sender: 'user',
-      audioSrc: '/audio/user-new.mp3',
-      duration: '0:08'
-    };
-    
-    setMessages(prev => [...prev, newUserMessage]);
-    
-    // Simulate AI response after 2 seconds
-    setTimeout(() => {
-      const newAIMessage: Message = {
-        id: Date.now() + 1, // Ensure unique ID
-        sender: 'ai',
-        audioSrc: '/audio/ai-response.mp3',
-        duration: '0:24',
-        resource: Math.random() > 0.5 ? {
-          title: '🎓 Learning Resources',
-          img: '/img/resource-new.jpg',
-          audioSrc: '/audio/resource-new.mp3'
-        } : undefined
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+      mediaRecorderRef.current.stop();
+      // Stop all tracks to release mic
+      mediaRecorderRef.current.stream.getTracks().forEach(t => t.stop());
+      mediaRecorderRef.current = null;
+    }
+  };
+
+  // Estimate duration of audio blob by loading into an audio element
+  const estimateBlobDuration = (blob: Blob): Promise<string> => {
+    return new Promise((resolve) => {
+      const tempUrl = URL.createObjectURL(blob);
+      const audio = new Audio(tempUrl);
+      const cleanup = () => {
+        URL.revokeObjectURL(tempUrl);
       };
-      
-      setMessages(prev => [...prev, newAIMessage]);
-    }, 2000);
+      audio.addEventListener('loadedmetadata', () => {
+        const seconds = Math.round(audio.duration || 0);
+        const mm = Math.floor(seconds / 60);
+        const ss = seconds % 60;
+        cleanup();
+        resolve(`${mm}:${ss.toString().padStart(2, '0')}`);
+      });
+      audio.addEventListener('error', () => {
+        cleanup();
+        resolve('0:00');
+      });
+    });
   };
 
   const handlePlayAudio = (messageId: number) => {
-    console.log('Playing audio for message:', messageId);
-    // In a real app, this would control actual audio playback
+    const message = messages.find(m => m.id === messageId);
+    if (!message) return;
+
+    if (playingAudioId === messageId) {
+      // pause
+      audioElRef.current?.pause();
+      setPlayingAudioId(null);
+      return;
+    }
+
+    // If another audio was playing, pause it first
+    audioElRef.current?.pause();
+
+    // Create or reuse audio element
+    if (!audioElRef.current) {
+      audioElRef.current = new Audio();
+      audioElRef.current.onended = () => setPlayingAudioId(null);
+    }
+
+    audioElRef.current.src = message.audioSrc;
+    audioElRef.current.play().catch(err => console.error('Play failed', err));
+    setPlayingAudioId(messageId);
   };
 
   const handlePlayResource = (messageId: number) => {
@@ -99,6 +168,7 @@ export default function Home() {
             scenario={activeScenario}
             onPlayAudio={handlePlayAudio}
             onPlayResource={handlePlayResource}
+            playingAudioId={playingAudioId}
           />
         </div>
       </div>

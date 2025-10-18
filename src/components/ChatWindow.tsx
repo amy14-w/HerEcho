@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import AudioBubble from './AudioBubble';
 import ResourceCard from './ResourceCard';
@@ -22,29 +22,12 @@ interface ChatWindowProps {
   scenario?: string;
   onPlayAudio?: (messageId: number) => void;
   onPlayResource?: (messageId: number) => void;
+  // Controlled playback state (managed by parent)
+  playingAudioId?: number | null;
+  playingResourceId?: number | null;
 }
 
-const ChatWindow: React.FC<ChatWindowProps> = ({ messages, scenario, onPlayAudio, onPlayResource }) => {
-  const [playingAudioId, setPlayingAudioId] = useState<number | null>(null);
-  const [playingResourceId, setPlayingResourceId] = useState<number | null>(null);
-
-  const handlePlayPause = (messageId: number) => {
-    if (playingAudioId === messageId) {
-      setPlayingAudioId(null);
-    } else {
-      setPlayingAudioId(messageId);
-    }
-    onPlayAudio?.(messageId);
-  };
-
-  const handlePlayResource = (messageId: number) => {
-    if (playingResourceId === messageId) {
-      setPlayingResourceId(null);
-    } else {
-      setPlayingResourceId(messageId);
-    }
-    onPlayResource?.(messageId);
-  };
+const ChatWindow: React.FC<ChatWindowProps> = ({ messages, scenario, onPlayAudio, onPlayResource, playingAudioId = null, playingResourceId = null }) => {
 
   return (
     <div className="flex-1 overflow-y-auto px-4 py-4 bg-gradient-to-b from-slate-50 to-slate-200">
@@ -63,7 +46,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ messages, scenario, onPlayAudio
                 audioSrc={message.audioSrc}
                 duration={message.duration}
                 isPlaying={playingAudioId === message.id}
-                onPlayPause={() => handlePlayPause(message.id)}
+                onPlayPause={() => onPlayAudio?.(message.id)}
               />
               
               {message.resource && message.sender === 'ai' && (
@@ -72,7 +55,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ messages, scenario, onPlayAudio
                     title={message.resource.title}
                     img={message.resource.img}
                     audioSrc={message.resource.audioSrc}
-                    onPlay={() => handlePlayResource(message.id)}
+                    onPlay={() => onPlayResource?.(message.id)}
                   />
                 </div>
               )}

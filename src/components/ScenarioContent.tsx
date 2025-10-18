@@ -1,4 +1,5 @@
 // src/components/ScenarioContent.tsx
+'use client';
 interface Message {
     id: number;
     sender: 'user' | 'ai';
