@@ -1,19 +1,12 @@
 'use client';
 // src/components/ScenarioContent.tsx
+
 interface Message {
-    id: number;
-    sender: 'user' | 'ai';
-    audioSrc: string;
-    duration: string;
-    resource?: {
-      title: string;
-      img: string;
-      audioSrc: string;
-    };
-  }
-  
-  interface Resource {
-    id: number;
+  id: number;
+  sender: "user" | "ai";
+  audioSrc: string;
+  duration: string;
+  resource?: {
     title: string;
     img: string;
     audioSrc: string;
@@ -74,3 +67,4 @@ interface Message {
   
   
   export default scenarioData;
+
