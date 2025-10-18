@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import AudioBubble from './AudioBubble';
-import ResourceCard from './ResourceCard';
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import AudioBubble from "./AudioBubble";
+import ResourceCard from "./ResourceCard";
 
 interface Message {
   id: number;
-  sender: 'user' | 'ai';
+  sender: "user" | "ai";
   audioSrc: string;
   duration: string;
   resource?: {
@@ -27,11 +27,43 @@ interface ChatWindowProps {
   playingResourceId?: number | null;
 }
 
-const ChatWindow: React.FC<ChatWindowProps> = ({ messages, scenario, onPlayAudio, onPlayResource, playingAudioId = null, playingResourceId = null }) => {
+const ChatWindow: React.FC<ChatWindowProps> = ({
+  messages,
+  scenario,
+  onPlayAudio,
+  onPlayResource,
+}) => {
+  const [playingAudioId, setPlayingAudioId] = useState<number | null>(null);
+  const [playingResourceId, setPlayingResourceId] = useState<number | null>(
+    null
+  );
+
+  const handlePlayPause = (messageId: number) => {
+    if (playingAudioId === messageId) {
+      setPlayingAudioId(null);
+    } else {
+      setPlayingAudioId(messageId);
+    }
+    onPlayAudio?.(messageId);
+  };
+
+  const handlePlayResource = (messageId: number) => {
+    if (playingResourceId === messageId) {
+      setPlayingResourceId(null);
+    } else {
+      setPlayingResourceId(messageId);
+    }
+    onPlayResource?.(messageId);
+  };
+  const handleResendToContacts = (messageId: number) => {
+    console.log('Resending message to contacts:', messageId);
+    // Here you would implement the actual resend logic
+    // Maybe show a contact picker or send to all contacts
+  };
 
   return (
-    <div className="flex-1 overflow-y-auto px-4 py-4 bg-gradient-to-b from-slate-50 to-slate-200">
-      <div className="space-y-4">
+    <div className="h-full overflow-y-auto px-4 py-2 bg-gradient-to-b from-slate-50 to-slate-200">
+      <div className="space-y-3">
         <AnimatePresence>
           {messages.map((message) => (
             <motion.div
@@ -42,14 +74,15 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ messages, scenario, onPlayAudio
               transition={{ duration: 0.3 }}
             >
               <AudioBubble
-                isUser={message.sender === 'user'}
+                isUser={message.sender === "user"}
                 audioSrc={message.audioSrc}
                 duration={message.duration}
                 isPlaying={playingAudioId === message.id}
-                onPlayPause={() => onPlayAudio?.(message.id)}
+                onPlayPause={() => handlePlayPause(message.id)}
+                onResendToContacts={() => handleResendToContacts(message.id)}
               />
-              
-              {message.resource && message.sender === 'ai' && (
+
+              {message.resource && message.sender === "ai" && (
                 <div className="flex justify-start">
                   <ResourceCard
                     title={message.resource.title}

@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { Mic, MicOff } from 'lucide-react';
-import { motion } from 'framer-motion';
+import React from "react";
+import { Mic, MicOff } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface MicButtonProps {
   isRecording: boolean;
@@ -10,34 +10,43 @@ interface MicButtonProps {
   onStopRecording: () => void;
 }
 
-const MicButton: React.FC<MicButtonProps> = ({ isRecording, onStartRecording, onStopRecording }) => {
+const MicButton: React.FC<MicButtonProps> = ({
+  isRecording,
+  onStartRecording,
+  onStopRecording,
+}) => {
   return (
-    <div className="fixed bottom-6 inset-x-0 flex justify-center">
+    <div className="flex justify-center py-3 relative">
       <motion.button
         onClick={isRecording ? onStopRecording : onStartRecording}
-        className={`
-          w-16 h-16 rounded-full flex items-center justify-center shadow-lg
-          transition-all duration-300 transform hover:scale-105 active:scale-95
-          ${isRecording 
-            ? 'bg-red-500 animate-pulse-slow shadow-red-500/50' 
-            : 'bg-gradient-to-r from-her-purple-500 to-her-pink-500 hover:shadow-purple-500/50'
-          }
-        `}
+        className="w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-95"
+        style={{
+          background: isRecording
+            ? "#D13955"
+            : "linear-gradient(135deg, #C44C18 0%, #F0A224 100%)",
+          boxShadow: isRecording
+            ? "0 10px 25px rgba(209, 57, 85, 0.5)"
+            : "0 10px 25px rgba(196, 76, 24, 0.3)",
+          animation: isRecording
+            ? "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite"
+            : "none",
+        }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
         {isRecording ? (
-          <MicOff size={24} className="text-white" />
+          <MicOff size={22} className="text-white" />
         ) : (
-          <Mic size={24} className="text-white" />
+          <Mic size={22} className="text-white" />
         )}
       </motion.button>
-      
+
       {isRecording && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-medium"
+          className="absolute -top-8 left-1/2 transform -translate-x-1/2 text-white px-2 py-1 rounded-full text-xs font-medium"
+          style={{ backgroundColor: "#D13955" }}
         >
           Recording...
         </motion.div>
