@@ -33,10 +33,17 @@ interface Message {
 export default function Home() {
   const [isRecording, setIsRecording] = useState(false);
   const [activeScenario, setActiveScenario] = useState("finance");
-  const [messages, setMessages] = useState(
-    scenarioData[activeScenario].messages
-  );
+  const [scenarioMessages, setScenarioMessages] = useState<Record<string, Message[]>>({
+    finance: scenarioData.finance.messages,
+    health: scenarioData.health.messages,
+    career: scenarioData.career.messages,
+    safety: scenarioData.safety.messages,
+    success: scenarioData.success.messages,
+  });
   const [playingAudioId, setPlayingAudioId] = useState<number | null>(null);
+
+  // Get current messages for active scenario
+  const messages = scenarioMessages[activeScenario] || [];
 
   // Refs for recording
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -69,7 +76,10 @@ export default function Home() {
           duration,
         };
 
-        setMessages((prev: Message[]) => [...prev, newUserMessage]);
+        setScenarioMessages(prev => ({
+          ...prev,
+          [activeScenario]: [...prev[activeScenario], newUserMessage]
+        }));
 
         // Simulate AI response after 2 seconds (can be replaced by real API)
         setTimeout(() => {
@@ -88,7 +98,10 @@ export default function Home() {
                   }
                 : undefined,
           };
-          setMessages((prev: Message[]) => [...prev, newAIMessage]);
+          setScenarioMessages(prev => ({
+            ...prev,
+            [activeScenario]: [...prev[activeScenario], newAIMessage]
+          }));
         }, 2000);
       };
 
@@ -167,7 +180,6 @@ export default function Home() {
 
   const handleScenarioChange = (scenarioId: string) => {
     setActiveScenario(scenarioId);
-    setMessages(scenarioData[scenarioId].messages);
   };
 
   return (
