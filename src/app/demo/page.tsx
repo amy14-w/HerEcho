@@ -96,48 +96,44 @@ export default function Home() {
         if (isSpanish || (lastLangRef.current === "es" && !isEnglish)) {
           // Spanish topic responses
           if (hasES(/\b(dinero|finanzas|ahorrar|invertir|presupuesto|gastar|ingreso|deuda|crédito|banco|riqueza)\b/, /\b(dinero|finanzas|ahorrar|invertir|presupuesto|gastar|ingreso|deuda|credito|banco|riqueza)\b/)) {
-            return "Para el bienestar financiero, lleva un registro de tus gastos, haz un presupuesto, ahorra regularmente y aprende lo básico sobre inversiones. Si quieres consejos sobre ahorro, inversión o manejo de dinero, ¡pregúntame!";
-          }
+            return "Para el bienestar financiero, es importante entender que el dinero es una herramienta, no un fin. Primero, aprende a diferenciar entre necesidades y deseos. Las necesidades son vivienda, comida, transporte y salud. Los deseos son todo lo demás. Segundo, crea un presupuesto usando la regla 50-30-20: 50% para necesidades, 30% para deseos, y 20% para ahorros e inversiones. Tercero, construye un fondo de emergencia de 3-6 meses de gastos antes de invertir. Cuarto, aprende sobre el interés compuesto - es cuando tus ganancias generan más ganancias. Por ejemplo, si inviertes $100 al 10% anual, en 10 años tendrás $259, no $200. Quinto, diversifica tus inversiones: no pongas todos tus huevos en una canasta. ¿Te gustaría que profundicemos en alguno de estos conceptos?";          }
           if (hasES(/\b(trabajo|carrera|empleo|habilidad|profesión)\b/, /\b(trabajo|carrera|empleo|habilidad|profesion)\b/)) {
-            return "Desarrolla tu carrera aprendiendo habilidades en demanda, creando un portafolio y haciendo networking intencional.";
-          }
-          if (hasES(/\b(empresa|negocio|emprender)\b/, /\b(empresa|negocio|emprender)\b/)) {
-            return "¿Quieres emprender? Identifica un problema real, valida con clientes, empieza pequeño y mejora constantemente.";
-          }
-          if (hasES(/\b(educación|aprender|estudio|curso|escuela|formación)\b/, /\b(educacion|aprender|estudio|curso|escuela|formacion)\b/)) {
-            return "Usa cursos gratuitos en línea; 15–20 minutos al día suman mucho.";
-          }
+            return "Para desarrollar tu carrera exitosamente, primero identifica tus fortalezas naturales y las habilidades que más disfrutas. Segundo, investiga qué profesiones están en crecimiento y pagan bien. Tercero, invierte en educación continua: cursos en línea, certificaciones, o incluso un título si es necesario. Cuarto, construye un portafolio de proyectos que demuestren tus habilidades. Quinto, haz networking estratégico: conecta con personas en tu industria, únete a grupos profesionales, y participa en eventos. Sexto, desarrolla habilidades blandas como comunicación, liderazgo y resolución de problemas. ¿En qué área específica te gustaría enfocar tu desarrollo profesional?";
+              }
+          if (hasES(/\b(empresa|negocio|emprender|emprendedor)\b/, /\b(empresa|negocio|emprender)\b/)) {
+            return "Emprender es un viaje emocionante pero requiere preparación. Primero, identifica un problema real que la gente tenga y esté dispuesta a pagar por resolver. Segundo, valida tu idea hablando con al menos 50 personas potenciales antes de invertir dinero. Tercero, crea un MVP (Producto Mínimo Viable) para probar tu concepto con usuarios reales. Cuarto, aprende sobre modelos de negocio: cómo generar ingresos, costos fijos vs variables, y punto de equilibrio. Quinto, desarrolla habilidades de ventas y marketing digital. Sexto, considera el financiamiento: ahorros personales, inversionistas ángeles, o préstamos. ¿Qué tipo de negocio te interesa explorar?";
+            }
+          if (hasES(/\b(educación|tener|conocimiento|como|para|aprender|estudio|curso|escuela|formación)\b/, /\b(educacion|conocimiento|como|para|aprender|estudio|curso|escuela|formacion)\b/)) {
+            return "El aprendizaje continuo es la clave del éxito en el siglo XXI. Primero, adopta una mentalidad de crecimiento: cree que puedes desarrollar cualquier habilidad con práctica. Segundo, usa la técnica de Pomodoro: estudia 25 minutos, descansa 5, repite. Tercero, aplica el aprendizaje activo: toma notas, haz resúmenes, enseña a otros lo que aprendes. Cuarto, diversifica tus fuentes: cursos en línea, libros, podcasts, YouTube, y práctica práctica. Quinto, establece metas SMART: Específicas, Medibles, Alcanzables, Relevantes y con Tiempo definido. Sexto, únete a comunidades de aprendizaje para mantenerte motivado. ¿Qué habilidad específica te gustaría desarrollar?";
+            }
           if (hasES(/\b(salud|bienestar|ejercicio|mental|estrés)\b/, /\b(salud|bienestar|ejercicio|mental|estres)\b/)) {
-            return "Empieza con pequeños hábitos: caminatas diarias, hidratación, sueño y mindfulness sencillo ayudan mucho.";
-          }
+            return "La salud es el fundamento de todo éxito. Primero, entiende que la salud mental y física están conectadas: el ejercicio libera endorfinas que mejoran el estado de ánimo. Segundo, establece rutinas matutinas: hidratación, estiramientos, y 10 minutos de meditación o respiración profunda. Tercero, prioriza el sueño: 7-9 horas de calidad son esenciales para la regeneración celular y la consolidación de memoria. Cuarto, nutre tu cuerpo con alimentos reales: evita procesados, aumenta vegetales y proteínas magras. Quinto, maneja el estrés con técnicas como mindfulness, journaling, o hobbies creativos. Sexto, haz ejercicio regular: incluso 20 minutos diarios de caminata rápida transforman tu salud. ¿Qué aspecto de tu bienestar te gustaría mejorar primero?";
+              }
           if (hasES(/\b(confianza|miedo|motivación|creer)\b/, /\b(confianza|miedo|motivacion|creer)\b/)) {
-            return "La confianza se construye con acción. Da un pequeño paso hoy y sigue avanzando.";
-          }
+            return "La confianza se construye paso a paso, no es algo que se tiene o no se tiene. Primero, entiende que el miedo es normal y útil: te protege de peligros reales. Segundo, diferencia entre miedo útil y miedo limitante: el primero te protege, el segundo te paraliza. Tercero, usa la técnica de 'exposición gradual': enfrenta tus miedos en pequeñas dosis hasta que se vuelvan familiares. Cuarto, celebra cada pequeño logro: tu cerebro necesita reconocer el progreso para mantener la motivación. Quinto, rodeate de personas que te apoyen y te inspiren. Sexto, practica la autocompasión: habla contigo mismo como hablarías con un buen amigo. ¿Qué miedo específico te gustaría superar?";
+             }
           if (hasES(/\b(música|canción|artista|banda|cantante)\b/, /\b(musica|cancion|artista|banda|cantante)\b/)) {
-            return "¡La música es maravillosa! ¿Qué géneros o artistas te gustan?";
-          }
+            return "La música es una de las formas más poderosas de expresión humana y conexión emocional. Primero, entiende que la música activa múltiples áreas del cerebro simultáneamente, mejorando la memoria y el estado de ánimo. Segundo, explora diferentes géneros: cada uno tiene su historia cultural y técnica musical única. Tercero, si quieres crear música, aprende teoría básica: escalas, acordes, y ritmo. Cuarto, usa la música como herramienta de productividad: diferentes géneros pueden mejorar concentración, creatividad, o relajación. Quinto, aprende sobre la industria musical: streaming, derechos de autor, y marketing digital. Sexto, conecta con otros músicos y fans para expandir tu perspectiva. ¿Qué aspecto de la música te interesa más: escuchar, crear, o aprender sobre la industria?";
+            }
           if (hasES(/\b(película|cine|serie|ver)\b/, /\b(pelicula|cine|serie|ver)\b/)) {
-            return "¡Las películas y series son geniales! ¿Qué género te gusta últimamente?";
-          }
+            return "El cine y las series son ventanas a diferentes culturas, épocas y perspectivas humanas. Primero, entiende que el entretenimiento puede ser educativo: documentales, biopics, y series históricas enseñan mientras entretienen. Segundo, analiza lo que ves: ¿cómo se construye la narrativa? ¿Qué técnicas cinematográficas se usan? Tercero, explora contenido internacional para ampliar tu perspectiva cultural. Cuarto, usa el entretenimiento como inspiración: muchas personas han encontrado su vocación viendo películas o series. Quinto, considera crear contenido: con smartphones y software gratuito, cualquiera puede hacer cortometrajes. Sexto, únete a comunidades de fans para discutir y analizar contenido. ¿Prefieres contenido educativo, entretenimiento puro, o te interesa crear tu propio contenido?";
+           }
           if (hasES(/\b(comida|receta|cocinar|restaurante|comer|hambre)\b/, /\b(comida|receta|cocinar|restaurante|comer|hambre)\b/)) {
-            return "Hablar de comida es lo mejor—¿qué tipo de cocina te gusta?";
+            return "La comida es mucho más que nutrición: es cultura, creatividad, y conexión social. Primero, entiende que cocinar es una habilidad fundamental que te da control sobre tu salud y presupuesto. Segundo, aprende técnicas básicas: cortar, saltear, hervir, y hornear son fundamentales. Tercero, explora diferentes cocinas del mundo: cada cultura tiene sabores y técnicas únicas. Cuarto, entiende la nutrición básica: proteínas, carbohidratos, grasas saludables, y micronutrientes. Quinto, considera el aspecto empresarial: la industria alimentaria es enorme, desde restaurantes hasta productos empaquetados. Sexto, usa la comida para conectar: organiza cenas, comparte recetas, o enseña a otros a cocinar. ¿Te interesa más la cocina casera, la gastronomía profesional, o el negocio de alimentos?";
           }
           if (hasES(/\b(viajar|viaje|vacaciones|visitar|país|ciudad)\b/, /\b(viajar|viaje|vacaciones|visitar|pais|ciudad)\b/)) {
-            return "Viajar abre la mente—¿a dónde te gustaría ir?";
+            return "Viajar es una de las inversiones más valiosas que puedes hacer en tu desarrollo personal. Primero, entiende que viajar expande tu perspectiva: te expone a diferentes culturas, idiomas, y formas de vida. Segundo, planifica inteligentemente: investiga destinos, presupuesto, y opciones de alojamiento económico. Tercero, considera el trabajo remoto: muchas personas combinan viaje y trabajo digital. Cuarto, aprende sobre la industria del turismo: es una de las más grandes del mundo, con oportunidades en hotelería, gastronomía, y servicios. Quinto, usa viajes para networking: conoce personas de diferentes países y culturas. Sexto, documenta tus experiencias: blog, redes sociales, o fotografía pueden convertirse en ingresos. ¿Te interesa más el turismo como experiencia personal, como negocio, o como carrera profesional?";
           }
           if (hasES(/\b(tecnología|computadora|teléfono|app|software|digital)\b/, /\b(tecnologia|computadora|telefono|app|software|digital)\b/)) {
-            return "La tecnología avanza rápido—¿qué parte te interesa?";
+            return "La tecnología está transformando cada aspecto de nuestras vidas y creando oportunidades sin precedentes. Primero, entiende que la alfabetización digital ya no es opcional: es esencial para el éxito profesional. Segundo, aprende habilidades técnicas básicas: programación, análisis de datos, o marketing digital pueden abrir muchas puertas. Tercero, explora la inteligencia artificial: está revolucionando industrias enteras y creando nuevos tipos de trabajos. Cuarto, considera el emprendimiento tecnológico: las barreras de entrada son más bajas que nunca. Quinto, entiende la ciberseguridad: proteger tu información personal y profesional es crucial. Sexto, usa la tecnología para aprender: cursos en línea, tutoriales, y comunidades digitales están disponibles 24/7. ¿Qué área tecnológica te interesa más: programación, marketing digital, o emprendimiento tecnológico?";
           }
           if (hasES(/\b(libro|leer|novela|historia|autor)\b/, /\b(libro|leer|novela|historia|autor)\b/)) {
-            return "A mí también me encanta leer—¿qué tipo de libros disfrutas?";
+            return "La lectura es una de las herramientas más poderosas para el crecimiento personal y profesional. Primero, entiende que leer regularmente mejora la concentración, vocabulario, y pensamiento crítico. Segundo, diversifica tu lectura: ficción desarrolla empatía, no-ficción enseña habilidades prácticas, y biografías ofrecen inspiración. Tercero, aplica lo que lees: toma notas, haz resúmenes, y comparte ideas con otros. Cuarto, considera escribir: muchos lectores ávidos descubren que tienen talento para la escritura. Quinto, explora la industria editorial: desde escritura hasta publicación, hay muchas oportunidades. Sexto, únete a clubes de lectura o comunidades online para discutir libros y conectar con otros lectores. ¿Te interesa más la lectura por placer, el desarrollo de habilidades a través de libros, o explorar la industria editorial?";
           }
           if (hasES(/\b(hobby|afición|interés|tiempo libre|pasión)\b/, /\b(hobby|aficion|interes|tiempo libre|pasion)\b/)) {
-            return "Los hobbies alimentan la creatividad—¿qué te gusta hacer para divertirte?";
+            return "Los hobbies son mucho más que entretenimiento: son puertas a nuevas habilidades, conexiones sociales, y potenciales ingresos. Primero, entiende que los hobbies reducen el estrés y mejoran la creatividad, lo que beneficia tu trabajo principal. Segundo, explora hobbies que desarrollen habilidades transferibles: fotografía mejora la composición visual, cocinar desarrolla planificación y ejecución. Tercero, considera monetizar tu hobby: muchas personas han convertido sus pasiones en negocios exitosos. Cuarto, únete a comunidades: los hobbies conectan personas con intereses similares y pueden expandir tu red profesional. Quinto, usa hobbies para aprender: cada hobby tiene su técnica, historia, y cultura. Sexto, equilibra tiempo: los hobbies deben enriquecer tu vida, no consumirla completamente. ¿Qué hobby te interesa explorar o desarrollar más?";
           }
-          if (hasES(/^(qué|quién|cuándo|dónde|por qué|cómo|es|son|puedo|podría|debería|hago|haces|haz|dime|da)\b/, /^(que|quien|cuando|donde|por que|como|es|son|puedo|podria|deberia|hago|haces|haz|dime|da)\b/)) {
-            return "¡Buena pregunta! Puedo conversar sobre muchos temas—¿qué te gustaría explorar?";
-          }
-          return "¡Gracias por compartir! Pregúntame lo que quieras—estoy aquí para conversar.";
+          return "¡Gracias por compartir! Cada conversación es una oportunidad de aprendizaje mutuo. Pregúntame lo que quieras—estoy aquí para conversar y ayudarte a explorar cualquier tema que te interese.";
         }
     
         // English responses (as before)
@@ -175,15 +171,11 @@ export default function Home() {
           return "Confidence comes from action. Take a small step today and build momentum.";
         }
         
-        // Technology topics
-        if (/technology|tech|computer|phone|app|software|digital|coding|programming|ai|artificial intelligence/.test(lower)) {
-          return "Tech is moving fast—what part of it interests you? I can chat about AI, programming, apps, or general tech topics!";
-        }
-        
         // AI-specific questions
-        if (/ai.*improv|artificial intelligence.*improv|ai.*lately|ai.*recent|ai.*advance|ai.*progress|ai.*development/.test(lower)) {
-          return "AI has made huge strides lately! We've seen major improvements in language models like GPT and Claude, better image generation, AI coding assistants, and more practical AI tools for everyday tasks. Multimodal AI that understands both text and images is becoming mainstream. What aspect of AI interests you most?";
+        if (/ai.improv|artificial intelligence.improv|ai.lately|ai.recent|ai.advance|ai.progress|ai.*development/.test(lower)) {
+            return "AI has made huge strides lately! We've seen major improvements in language models like GPT and Claude, better image generation, AI coding assistants, and more practical AI tools for everyday tasks. Multimodal AI that understands both text and images is becoming mainstream. What aspect of AI interests you most?";
         }
+
         
         // Entertainment
         if (/music|song|artist|band|singer/.test(lower)) {
