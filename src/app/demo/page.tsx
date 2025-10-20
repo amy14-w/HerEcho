@@ -41,6 +41,7 @@ export default function Home() {
     success: scenarioData.success.messages,
   });
   const [playingAudioId, setPlayingAudioId] = useState<number | null>(null);
+  const [messageIdCounter, setMessageIdCounter] = useState(1000);
 
   // Get current messages for active scenario
   const messages = scenarioMessages[activeScenario] || [];
@@ -324,79 +325,81 @@ export default function Home() {
         const duration = await estimateBlobDuration(blob);
 
         const newUserMessage: Message = {
-          id: Date.now(),
+          id: messageIdCounter,
           sender: "user",
           audioSrc: url,
           duration,
         };
 
 
+        setMessageIdCounter(prev => prev + 2);
         setScenarioMessages(prev => ({
-          ...prev,
-          [activeScenario]: [...prev[activeScenario], newUserMessage]
+        ...prev,
+        [activeScenario]: [...prev[activeScenario], newUserMessage]
         }));
 
         // Simulate AI response after 2 seconds (can be replaced by real API)
         setTimeout(async () => {
-          const newAIMessage: Message = {
-            id: Date.now() + 1,
+        const newAIMessage: Message = {
+            id: messageIdCounter + 1,
             sender: "ai",
             audioSrc: "/audio/ai-response.mp3",
             duration: "0:24",
             resource:
-              Math.random() > 0.5
+            Math.random() > 0.5
                 ? {
                     title: "🎓 Learning Resources",
                     img: "/img/resource-new.jpg",
                     audioSrc: "/audio/resource-new.mp3",
                     description: "Learn more about this topic",
-                  }
+                }
                 : undefined,
-          };
-  
-          // Add a temporary AI loading bubble to mimic previous UX
-          const loadingId = Date.now() + 1;
-          setScenarioMessages((prev) => ({
-            ...prev,
-            [activeScenario]: [
-              ...prev[activeScenario],
-              { id: loadingId, sender: "ai", audioSrc: "", duration: "" },
-            ],
-          }));
-  
-          try {
-            const responseText = finalTranscript
-              ? generateSmartResponse(finalTranscript)
-              : getFallbackResponse();
-            console.log("Generating response for:", finalTranscript || "(no transcript)");
-            console.log("Response:", responseText);
-  
-            const aiAudio = await generateBrowserTTS(responseText);
-            // Replace loading bubble with real AI response
-            setScenarioMessages((prev) => ({
-              ...prev,
-              [activeScenario]: prev[activeScenario].map((m) =>
-                m.id === loadingId
-                  ? { ...m, audioSrc: aiAudio.url, duration: aiAudio.duration }
-                  : m
-              ),
-            }));
-          } catch (err) {
-            console.error("AI voice response failed", err);
-          } finally {
-            recognitionRef.current = null;
-            transcriptRef.current = "";
-          }
-        }, 2000);
         };
 
-        mediaRecorder.start();
-        mediaRecorderRef.current = mediaRecorder;
-        setIsRecording(true);
-    } catch (err) {
-        console.error("Could not start recording", err);
-    }
+        // Add a temporary AI loading bubble to mimic previous UX
+        const loadingId = messageIdCounter + 1;
+        setScenarioMessages((prev) => ({
+            ...prev,
+            [activeScenario]: [
+            ...prev[activeScenario],
+            { id: loadingId, sender: "ai", audioSrc: "", duration: "" },
+            ],
+        }));
+        setMessageIdCounter(prev => prev + 2);
+        
+        try {
+          const responseText = finalTranscript
+            ? generateSmartResponse(finalTranscript)
+            : getFallbackResponse();
+          console.log("Generating response for:", finalTranscript || "(no transcript)");
+          console.log("Response:", responseText);
+
+          const aiAudio = await generateBrowserTTS(responseText);
+          // Replace loading bubble with real AI response
+          setScenarioMessages((prev) => ({
+            ...prev,
+            [activeScenario]: prev[activeScenario].map((m) =>
+              m.id === loadingId
+                ? { ...m, audioSrc: aiAudio.url, duration: aiAudio.duration }
+                : m
+            ),
+          }));
+        } catch (err) {
+          console.error("AI voice response failed", err);
+        } finally {
+          recognitionRef.current = null;
+          transcriptRef.current = "";
+        }
+      }, 2000);
     };
+
+    mediaRecorder.start();
+    mediaRecorderRef.current = mediaRecorder;
+    setIsRecording(true);
+  } catch (err) {
+    console.error("Could not start recording", err);
+  }
+};
   
     const handleStopRecording = () => {
       setIsRecording(false);
